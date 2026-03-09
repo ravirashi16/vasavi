@@ -1,0 +1,4 @@
+user_id,profile_date,payload
+1,2026-03-08,"{""taste_profile"": {""restaurants"": ""foo""}}"
+2,2026-03-08,"{""taste_profile"": {""tv"": ""bar""}}"
+5,2026-03-08,"{""taste_profile"": {""foo"": ""bar""}}"
