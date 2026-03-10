@@ -5,22 +5,31 @@ description = "Service for generating and caching user taste profiles"
 authors = [
     {name = "recz team", email = "dev@example.com"}
 ]
+requires-python = ">=3.12"
 
-# use a subset of dependencies required for running the API and library
 dependencies = [
     "fastapi>=0.95.0",
     "uvicorn[standard]>=0.23.0",
     "pandas>=2.0",
     "pymysql>=1.0",
+    "sqlalchemy>=2.0",
     "anthropic>=0.50",
     "pydantic>=1.10",
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "httpx>=0.27",        # required by FastAPI TestClient
+    "pytest-anyio>=0.0.0",
 ]
 
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.setuptools]
+[tool.hatch.build.targets.wheel]
 packages = ["vasuvi"]
 
 [tool.pytest.ini_options]

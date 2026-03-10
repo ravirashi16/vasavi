@@ -1,6 +1,13 @@
 .env
 .venv/
 __pycache__/
+*.pyc
+*.pyo
+dist/
+*.egg-info/
+
+# uv – lock file IS committed; local cache is not
+.uv/
 
 # project data files
 sample_posts.json
@@ -10,3 +17,6 @@ User_ID_profile.xlsx
 
 # editors
 .vscode/
+
+# stray requirements file (replaced by uv + pyproject.toml)
+requirements.txt
