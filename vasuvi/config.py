@@ -2,6 +2,12 @@
 
 import os
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # python-dotenv is optional; env vars can be set by the shell/container
+
 # Database connection is mandatory when running with USE_DB=1; no
 # defaults are provided to avoid accidental credential leakage.
 DB_USER = os.environ.get("DB_USER")
