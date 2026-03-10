@@ -13,8 +13,14 @@ service that can scale and avoids calling Claude on every request.
 > environment variable (default: `taste_profiles.json`).
 
 To simulate user posts when no real database exists, create a JSON file and
-set the `POSTS_JSON` environment variable to its path.  A sample file with
-realistic entries is included as `sample_posts.json` in this repo.
+set the `POSTS_JSON` environment variable to its path.  (The `sample_posts.json`
+file that used to be shipped has been removed from the repository and is
+now only available as a test fixture under `tests/fixtures`.)
+
+> **Note:** when running with `USE_DB=1` the service ignores the JSON/CSV
+> paths completely and pulls directly from the `user_post` table.  File-based
+> mode is provided only for quick local experimentation and is disabled by
+> default.
 
 > **Tip:** if `POSTS_JSON` (or `POSTS_CSV`) is not defined the library will
 > behave as if the user has no posts, and `get_user_taste_profile` will

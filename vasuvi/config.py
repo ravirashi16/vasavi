@@ -2,11 +2,18 @@
 
 import os
 
-DB_USER = os.environ.get("DB_USER", "dev")
-DB_PASSWORD = os.environ.get("DB_PASSWORD", "Tartan#20222")
-DB_HOST = os.environ.get("DB_HOST", "10.111.5.172")
+# Database connection is mandatory when running with USE_DB=1; no
+# defaults are provided to avoid accidental credential leakage.
+DB_USER = os.environ.get("DB_USER")
+DB_PASSWORD = os.environ.get("DB_PASSWORD")
+DB_HOST = os.environ.get("DB_HOST")
 DB_PORT = os.environ.get("DB_PORT", "3306")
-DB_NAME = os.environ.get("DB_NAME", "dev_reczdb")
+DB_NAME = os.environ.get("DB_NAME")
+
+if os.environ.get("USE_DB", "1") == "1":
+    missing = [k for k,v in [("DB_USER",DB_USER),("DB_PASSWORD",DB_PASSWORD),("DB_HOST",DB_HOST),("DB_NAME",DB_NAME)] if not v]
+    if missing:
+        raise RuntimeError(f"missing required DB env vars: {', '.join(missing)}")
 
 ANTHROPIC_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-haiku-4-5-20251001")
 

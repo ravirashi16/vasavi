@@ -7,9 +7,10 @@ import os
 
 import pandas as pd
 
-USE_DB = os.environ.get("USE_DB") == "1"
+# use database by default; set USE_DB=0 to run in file‑based dev mode
+USE_DB = os.environ.get("USE_DB", "1") == "1"
 
-JSON_CACHE_PATH = os.environ.get("DB_JSON_PATH", "taste_profiles.json")
+JSON_CACHE_PATH = os.environ.get("DB_JSON_PATH", "taste_profiles.json")  # used only when USE_DB is false
 
 if USE_DB:
     DB_USER = os.environ.get("DB_USER", "dev")

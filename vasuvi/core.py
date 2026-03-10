@@ -45,8 +45,13 @@ def get_user_taste_profile(
     if as_of is None:
         as_of = date.today()
 
+    import time, logging
+    start = time.time()
+    logging.basicConfig(level=logging.INFO)
+
     cached = get_cached_profile(user_id, as_of)
     if cached:
+        logging.info(f"cache hit for user {user_id} date {as_of} (took {time.time()-start:.3f}s)")
         return cached
 
 
