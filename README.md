@@ -6,6 +6,13 @@ application.  The original algorithm was implemented in a one‑off script
 (`profiletaste.py`); the goal of this project is to turn it into a deployable
 service that can scale and avoids calling Claude on every request.
 
+The project uses [uv](https://pypi.org/project/uv/) for dependency management
+and packaging; developers should install dependencies via `uv install` and
+run tests with `uv run pytest`.  A lockfile (`uv.lock`) tracks exact versions.
+
+A comprehensive test suite exercises the data pipeline, API endpoints, and
+model validation; see the `tests/` directory for examples.
+
 > **Note:** the database backend has been removed entirely for local
 > development.  All caching now happens in a simple **JSON file**; the rest of
 > the codebase still uses the same API, but no network connections are
@@ -107,6 +114,20 @@ not need to supply one explicitly.
 
 A simple health check is available at `GET /health`.
 
+### Background jobs
+
+A simple module (`vasuvi/jobs.py`) contains helpers for finding users with
+new posts and refreshing their profiles.  You can invoke
+`vasuvi.jobs.refresh_profiles_for_active_users()` from a cron job or a
+long-running worker.  For example:
+
+```bash
+# run nightly
+python -m vasuvi.jobs
+```
+
+This ensures summaries are up to date without waiting for an API request.
+
 ### REST vs gRPC
 
 The current implementation is REST because:
@@ -158,9 +179,24 @@ You can also call the library directly from another script, for example:
 ```python
 from vasuvi import get_user_taste_profile
 
-profile = get_user_taste_profile(12345, api_key="sk-..." )
+profile = get_user_taste_profile(12345)
 print(profile)
 ```
+
+
+### Running the tests
+
+Unit and integration tests are located under `tests/`.  Install dev
+dependencies with `uv install --dev` (or `pip install -r requirements-dev.txt`)
+then run:
+
+```bash
+uv run pytest
+```
+
+The tests exercise the markdown generation, API endpoints, and the core
+service with a mocked LLM client; they can be run repeatedly without a
+database connection.
 
 ---
 

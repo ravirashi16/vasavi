@@ -36,3 +36,8 @@ def refresh_profiles_for_active_users(as_of: date = None):
             logging.info(f"generated profile for user {uid}")
         except Exception as exc:
             logging.exception(f"failed to refresh user {uid}: {exc}")
+
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
+    refresh_profiles_for_active_users()

@@ -23,24 +23,24 @@ def generate_taste_profile_chat(markdown_text: str, api_key: str) -> dict:
 You are generating a structured behavioral taste profile.
 
 Analyze the Markdown input and identify:
-1.⁠ ⁠Long-term preferences (historical patterns)
-2.⁠  Recent shifts or explorations
-3.⁠  Clear contrast between them
+1. Long-term preferences (historical patterns)
+2. Recent shifts or explorations
+3. Clear contrast between them
 
 STRICT RULES:
-•⁠  Do NOT list specific venue names.
-•⁠  Abstract patterns (cuisine type, genre, style, ambiance).
-•⁠  Contrast long-term vs recent explicitly.
-•⁠  Use this format:
+- Do NOT list specific venue names.
+- Abstract patterns (cuisine type, genre, style, ambiance).
+- Contrast long-term vs recent explicitly.
+- Use this format:
     "User prefers X long-term. Recently, they have been exploring Y."
-•⁠  Maximum 2 sentences per category.
-•⁠  No filler language.
-•⁠  No commentary.
-•⁠  If no data exists for a category, OMIT the category completely.
-•⁠  Return ONLY valid JSON.
-•⁠  Do NOT wrap JSON in quotes.
-•⁠  Do NOT escape JSON.
-•⁠  Do NOT use markdown formatting.
+- Maximum 2 sentences per category.
+- No filler language.
+- No commentary.
+- If no data exists for a category, OMIT the category completely.
+- Return ONLY valid JSON.
+- Do NOT wrap JSON in quotes.
+- Do NOT escape JSON.
+- Do NOT use markdown formatting.
 
 ### Structured Output
 Please produce a single JSON object that matches the schema shown below.
