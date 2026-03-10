@@ -1,6 +1,8 @@
 """Service layer for generating and caching profiles."""
 from datetime import date
 from typing import Optional, Dict, Any
+import logging
+import time
 
 from . import config
 from .db import get_cached_profile, store_profile
@@ -62,7 +64,9 @@ def get_user_taste_profile(
         return {"taste_profile": {}}
 
     markdown_text = prepare_step2_markdown(df, category_map, recent_days)
+    llm_start = time.time()
     profile = generate_taste_profile_chat(markdown_text, None)
+    logging.info(f"LLM call took {time.time()-llm_start:.3f}s")
 
     if isinstance(profile, dict) and profile.get("error"):
         profile = _derive_profile_from_df(df)
