@@ -8,7 +8,6 @@ from .processor import fetch_user_posts_dataframe, prepare_step2_markdown
 from .llm import generate_taste_profile_chat
 
 _CATEGORY_NAMES = {3: "restaurants", 2: "tv", 1: "movies", 8: "books"}
-_CATEGORY_NAMES = {3: "restaurants", 2: "tv", 1: "movies", 8: "books"}
 
 def _derive_profile_from_df(df):
     """Generate a very basic profile from the raw posts dataframe.
@@ -56,7 +55,7 @@ def get_user_taste_profile(
 
 
     if category_map is None:
-        category_map = {3: "restaurants", 2: "tv", 1: "movies", 8: "books"}
+        category_map = _CATEGORY_NAMES.copy()
 
     df = fetch_user_posts_dataframe([user_id])
     if df.empty:
