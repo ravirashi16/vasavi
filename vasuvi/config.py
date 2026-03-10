@@ -16,8 +16,22 @@ DB_HOST = os.environ.get("DB_HOST")
 DB_PORT = os.environ.get("DB_PORT", "3306")
 DB_NAME = os.environ.get("DB_NAME")
 
-if os.environ.get("USE_DB", "1") == "1":
-    missing = [k for k,v in [("DB_USER",DB_USER),("DB_PASSWORD",DB_PASSWORD),("DB_HOST",DB_HOST),("DB_NAME",DB_NAME)] if not v]
+
+def require_db_vars():
+    """Raise RuntimeError if any required DB env vars are missing.
+
+    Called by get_engine() at connection time, not at import time, so that
+    tests running with USE_DB=0 are never affected.
+    """
+    missing = [
+        k for k, v in [
+            ("DB_USER", DB_USER),
+            ("DB_PASSWORD", DB_PASSWORD),
+            ("DB_HOST", DB_HOST),
+            ("DB_NAME", DB_NAME),
+        ]
+        if not v
+    ]
     if missing:
         raise RuntimeError(f"missing required DB env vars: {', '.join(missing)}")
 

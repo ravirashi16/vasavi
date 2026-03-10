@@ -5,8 +5,6 @@ from typing import Optional, Dict, Any
 import json
 import os
 
-import pandas as pd
-
 # use database by default; set USE_DB=0 to run in file‑based dev mode
 USE_DB = os.environ.get("USE_DB", "1") == "1"
 
@@ -23,6 +21,7 @@ if USE_DB:
         """Return a singleton SQLAlchemy engine configured via env vars."""
         global _engine
         if _engine is None:
+            config.require_db_vars()
             conn = (
                 f"mysql+pymysql://{config.DB_USER}:{config.DB_PASSWORD}"
                 f"@{config.DB_HOST}:{config.DB_PORT}/{config.DB_NAME}"

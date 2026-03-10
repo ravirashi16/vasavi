@@ -11,23 +11,16 @@ from .llm import generate_taste_profile_chat
 
 _CATEGORY_NAMES = {3: "restaurants", 2: "tv", 1: "movies", 8: "books"}
 
-def _derive_profile_from_df(df):
-    """Generate a very basic profile from the raw posts dataframe.
-
-    Returns the same structure as the LLM output so callers can consume it
-    uniformly.  This is used in tests when the API key is missing or invalid.
-    """
-    profile = {}
+def _derive_profile_from_posts(posts):
+    """Generate a basic profile from raw post dicts when the LLM is unavailable."""
     seen = set()
-    for _, row in df.iterrows():
-        cat = _CATEGORY_NAMES.get(row.get("post_category_id"))
+    for post in posts:
+        cat = _CATEGORY_NAMES.get(post.get("post_category_id"))
         if cat:
             seen.add(cat)
     if not seen:
         return {"taste_profile": {}}
-    for cat in seen:
-        profile[cat] = f"User has activity in {cat}."
-    return {"taste_profile": profile}
+    return {"taste_profile": {cat: f"User has activity in {cat}." for cat in seen}}
 
 
 def get_user_taste_profile(
@@ -59,17 +52,17 @@ def get_user_taste_profile(
     if category_map is None:
         category_map = _CATEGORY_NAMES.copy()
 
-    df = fetch_user_posts_dataframe([user_id])
-    if df.empty:
+    posts = fetch_user_posts_dataframe([user_id])
+    if not posts:
         return {"taste_profile": {}}
 
-    markdown_text = prepare_step2_markdown(df, category_map, recent_days)
+    markdown_text = prepare_step2_markdown(posts, category_map, recent_days)
     llm_start = time.time()
     profile = generate_taste_profile_chat(markdown_text, None)
     logging.info(f"LLM call took {time.time()-llm_start:.3f}s")
 
     if isinstance(profile, dict) and profile.get("error"):
-        profile = _derive_profile_from_df(df)
+        profile = _derive_profile_from_posts(posts)
 
     store_profile(user_id, as_of, profile)
     return profile
