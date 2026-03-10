@@ -13,12 +13,7 @@ USE_DB = os.environ.get("USE_DB", "1") == "1"
 JSON_CACHE_PATH = os.environ.get("DB_JSON_PATH", "taste_profiles.json")  # used only when USE_DB is false
 
 if USE_DB:
-    DB_USER = os.environ.get("DB_USER", "dev")
-    DB_PASSWORD = os.environ.get("DB_PASSWORD", "Tartan#20222")
-    DB_HOST = os.environ.get("DB_HOST", "10.111.5.172")
-    DB_PORT = os.environ.get("DB_PORT", "3306")
-    DB_NAME = os.environ.get("DB_NAME", "dev_reczdb")
-
+    from . import config
     from sqlalchemy import create_engine, text
     from sqlalchemy.engine import Engine
 
@@ -29,7 +24,8 @@ if USE_DB:
         global _engine
         if _engine is None:
             conn = (
-                f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+                f"mysql+pymysql://{config.DB_USER}:{config.DB_PASSWORD}"
+                f"@{config.DB_HOST}:{config.DB_PORT}/{config.DB_NAME}"
             )
             _engine = create_engine(conn, pool_pre_ping=True)
         return _engine
